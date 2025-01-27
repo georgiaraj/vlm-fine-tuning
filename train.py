@@ -6,10 +6,6 @@ from datasets import ScalpelDataset
 
 
 def train(train_dataset, val_dataset):
-    model = VisionEncoderDecoderModel.from_pretrained("nlpconnect/vit-gpt2-image-captioning")
-    feature_extractor = ViTImageProcessor.from_pretrained("nlpconnect/vit-gpt2-image-captioning")
-    tokenizer = AutoTokenizer.from_pretrained("nlpconnect/vit-gpt2-image-captioning")
-
     training_args = TrainingArguments(
         output_dir='./results',
         num_train_epochs=3,
@@ -36,11 +32,14 @@ def train(train_dataset, val_dataset):
     return model, feature_extractor, tokenizer
 
 if __name__ == '__main__':
+    model = VisionEncoderDecoderModel.from_pretrained("nlpconnect/vit-gpt2-image-captioning")
+    feature_extractor = ViTImageProcessor.from_pretrained("nlpconnect/vit-gpt2-image-captioning")
+    tokenizer = AutoTokenizer.from_pretrained("nlpconnect/vit-gpt2-image-captioning")
 
     dataset, test_dataset = ScalpelDataset('../scalpel-angles/scalpel_dataset.csv', feature_extractor, tokenizer)
     train_dataset, val_dataset = dataset.train_val_split(0.9)
 
-    model, feature_extractor, tokenizer =  train(train_dataset, val_dataset)
+    model, feature_extractor, tokenizer =  train(model, feature_extractor, tokenizer, train_dataset, val_dataset)
 
     model.eval()
 
