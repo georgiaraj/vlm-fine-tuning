@@ -5,7 +5,7 @@ import math
 import json
 from pathlib import Path
 
-root_dir = Path('/home/georgia/Data/scalpel-angles')
+root_dir = Path('../scalpel-angles')
 image_dir = root_dir / 'images'
 json_dir = root_dir / 'jsons'
 

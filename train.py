@@ -5,7 +5,6 @@ from transformers import Trainer, TrainingArguments
 from datasets import ScalpelDataset
 
 
-
 def train(train_dataset, val_dataset):
     model = VisionEncoderDecoderModel.from_pretrained("nlpconnect/vit-gpt2-image-captioning")
     feature_extractor = ViTImageProcessor.from_pretrained("nlpconnect/vit-gpt2-image-captioning")
@@ -38,7 +37,7 @@ def train(train_dataset, val_dataset):
 
 if __name__ == '__main__':
 
-    dataset, test_dataset = ScalpelDataset('/content/drive/MyDrive/scalpel-angles/scalpel_dataset.csv', feature_extractor, tokenizer)
+    dataset, test_dataset = ScalpelDataset('../scalpel-angles/scalpel_dataset.csv', feature_extractor, tokenizer)
     train_dataset, val_dataset = dataset.train_val_split(0.9)
 
     model, feature_extractor, tokenizer =  train(train_dataset, val_dataset)
