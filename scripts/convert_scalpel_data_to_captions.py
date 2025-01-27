@@ -60,3 +60,4 @@ with open(str(root_dir / 'scalpel_dataset.csv'), 'w') as f:
         # Check for straight bboxes    
         #if data['angle'] == 0:
         #    f.write(f'{im.name}, {i["name"]}, {",".join([str(b) for b in i["bbox"]])}\n')
+print(f'CSV file created at {root_dir / "scalpel_dataset.csv"}')
