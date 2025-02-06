@@ -20,6 +20,11 @@ def parse_args():
     return parser.parse_args()
 
 
+class CustomTrainer(Trainer):
+    def compute_loss(self, model, inputs, num_items_in_batch=None, return_outputs=False):
+        print(f'Types of inputs: {inputs.keys()}')
+        print("Input shapes:", {k: v.shape if isinstance(v, torch.Tensor) else v for k, v in inputs.items()})
+        return super().compute_loss(model, inputs, return_outputs=return_outputs)
 
 
 def train(model, feature_extractor, tokenizer, train_dataset, val_dataset, args):
@@ -42,7 +47,7 @@ def train(model, feature_extractor, tokenizer, train_dataset, val_dataset, args)
         logging_dir='./logs',
     )
 
-    trainer = Trainer(
+    trainer = CustomTrainer(
         model=model,
         args=training_args,
         train_dataset=train_dataset,
@@ -76,11 +81,12 @@ if __name__ == '__main__':
 
     model = VisionEncoderDecoderModel.from_pretrained(args.model_name)
 
-    print(f'Model: {model}')
-    print(f'Feature extractor: {feature_extractor}')
-    print(f'Tokenizer: {tokenizer}')
+    print(f'Model forward variables: {model.forward.__code__.co_varnames}')
+    print(f'Train dataset keys: {train_dataset[0].keys()}')
 
-    pdb.set_trace()
+    #print(f'Model: {model}')
+    #print(f'Feature extractor: {feature_extractor}')
+    #print(f'Tokenizer: {tokenizer}')
 
     model, feature_extractor, tokenizer =  train(model, feature_extractor, tokenizer, train_dataset, val_dataset, args)
 
