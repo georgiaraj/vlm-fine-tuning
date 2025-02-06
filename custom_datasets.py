@@ -25,7 +25,7 @@ class ScalpelDataset(Dataset):
         caption = self.data.iloc[idx, 1]
         tokenized_caption = self.tokenizer(caption, padding="max_length", truncation=True, max_length=128, return_tensors="pt")
         return {
-            'pixel_values': features['pixel_values'], 
-            'input_ids': tokenized_caption['input_ids'], 
-            'attention_mask': tokenized_caption['attention_mask']
+            'pixel_values': features['pixel_values'].squeeze(), 
+            'labels': tokenized_caption['input_ids'].squeeze(), 
+            'decoder_attention_mask': tokenized_caption['attention_mask'].squeeze()
         }
