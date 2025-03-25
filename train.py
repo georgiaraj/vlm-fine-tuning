@@ -25,8 +25,8 @@ def parse_args():
 
 class CustomTrainer(Trainer):
     def compute_loss(self, model, inputs, num_items_in_batch=None, return_outputs=False):
-        print(f'Types of inputs: {inputs.keys()}')
-        print("Input shapes:", {k: v.shape if isinstance(v, torch.Tensor) else v for k, v in inputs.items()})
+        #print(f'Types of inputs: {inputs.keys()}')
+        #print("Input shapes:", {k: v.shape if isinstance(v, torch.Tensor) else v for k, v in inputs.items()})
         return super().compute_loss(model, inputs, return_outputs=return_outputs)
 
 
