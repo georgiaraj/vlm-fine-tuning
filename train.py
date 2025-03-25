@@ -46,7 +46,6 @@ def train(model, feature_extractor, tokenizer, train_dataset, val_dataset, args)
         weight_decay=0.01,
         logging_dir='./logs',
         no_cuda=False,
-        device='cuda:0'
     )
 
     trainer = CustomTrainer(
