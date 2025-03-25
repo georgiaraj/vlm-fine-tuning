@@ -42,11 +42,11 @@ def train(model, feature_extractor, tokenizer, train_dataset, val_dataset, args)
         num_train_epochs=3,
         per_device_train_batch_size=8,
         per_device_eval_batch_size=8,
-        warmup_steps=500,
+        #warmup_steps=500,
         weight_decay=0.01,
         logging_dir='./logs',
         no_cuda=False,
-    )
+        )
 
     trainer = CustomTrainer(
         model=model,
