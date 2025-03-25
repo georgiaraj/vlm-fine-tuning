@@ -89,7 +89,8 @@ if __name__ == '__main__':
     #print(f'Model: {model}')
     #print(f'Feature extractor: {feature_extractor}')
     #print(f'Tokenizer: {tokenizer}')
-
+    #pdb.set_trace()
+    
     model, feature_extractor, tokenizer =  train(model, feature_extractor, tokenizer, train_dataset, val_dataset, args)
 
     print(f'Model trained')
@@ -97,9 +98,9 @@ if __name__ == '__main__':
     model.eval()
 
     print(f'Testing model on test dataset')
-    for image, caption in test_dataset:
-        inputs = feature_extractor(image, return_tensors="pt")
-        outputs = model.generate(**inputs, max_new_tokens=20)
+    for data in test_dataset:
+        caption = tokenizer.decode(data['labels'], skip_special_tokens=True)
+        outputs = model.generate(data['pixel_values'].unsqueeze(0))
         print(f'predicted: {tokenizer.decode(outputs[0], skip_special_tokens=True)}')
         print(f'actual: {caption}')
         print('-'*100)
