@@ -1,5 +1,7 @@
 import pdb
+import os
 import torch
+import datetime
 import argparse
 from pathlib import Path
 from transformers import VisionEncoderDecoderModel, ViTImageProcessor, AutoTokenizer
@@ -17,6 +19,7 @@ def parse_args():
     parser.add_argument('--model_name', type=str, default='nlpconnect/vit-gpt2-image-captioning')
     parser.add_argument('--dataset_path', type=str, default='scalpel-angles/scalpel_dataset.csv')
     parser.add_argument('--output_dir', type=str, default='scalpel-angles-model')
+    parser.add_argument('--clearml-task-name', type=str, default=f'VLM Training Job {datetime.datetime.now()}')
     return parser.parse_args()
 
 
@@ -74,6 +77,11 @@ if __name__ == '__main__':
     
     data_dir = Path(args.dataset_path)
 
+    os.environ.update({
+        'CLEARML_LOG_MODEL': 'True',
+        'CLEARML_TASK': args.clearml_task_name
+    })
+
     dataset = ScalpelDataset(data_dir, feature_extractor, tokenizer)
     test_dataset = ScalpelDataset(data_dir, feature_extractor, tokenizer, data_set='test')
     train_dataset, val_dataset = torch.utils.data.random_split(dataset, [0.9, 0.1])
@@ -98,9 +106,12 @@ if __name__ == '__main__':
     model.eval()
 
     print(f'Testing model on test dataset')
-    for data in test_dataset:
-        caption = tokenizer.decode(data['labels'], skip_special_tokens=True)
-        outputs = model.generate(data['pixel_values'].unsqueeze(0))
-        print(f'predicted: {tokenizer.decode(outputs[0], skip_special_tokens=True)}')
-        print(f'actual: {caption}')
-        print('-'*100)
+    with open('results.csv', 'w') as f:
+        f.write('actual, predicted\n')
+        for data in test_dataset:
+            caption = tokenizer.decode(data['labels'], skip_special_tokens=True)
+            outputs = model.generate(data['pixel_values'].unsqueeze(0))
+            f.write(f'{tokenizer.decode(outputs[0], skip_special_tokens=True)},')
+            f.write(f'{caption}\n')
+        
+    
