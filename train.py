@@ -35,7 +35,8 @@ def train(model, feature_extractor, tokenizer, train_dataset, val_dataset, args)
     def compute_metrics(eval_pred):
         pdb.set_trace()
         predictions, labels = eval_pred
-        decoded_preds = tokenizer.batch_decode(predictions, skip_special_tokens=True)
+        caption_preds = np.argmax(predictions[0], axis=-1)
+        decoded_preds = tokenizer.batch_decode(caption_preds, skip_special_tokens=True)
         decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
         return rouge_score.compute(predictions=decoded_preds, references=decoded_labels, use_stemmer=True)
     
