@@ -26,9 +26,9 @@ def parse_args():
 
 class CustomTrainer(Trainer):
     def compute_loss(self, model, inputs, num_items_in_batch=None, return_outputs=False):
-        #print(f'Types of inputs: {inputs.keys()}')
-        #print("Input shapes:", {k: v.shape if isinstance(v, torch.Tensor) else v for k, v in inputs.items()})
-        return super().compute_loss(model, inputs, return_outputs=return_outputs)
+        loss = super().compute_loss(model, inputs, return_outputs=return_outputs)
+
+        return loss
 
 
 def train(model, feature_extractor, tokenizer, train_dataset, val_dataset, args):
@@ -39,6 +39,10 @@ def train(model, feature_extractor, tokenizer, train_dataset, val_dataset, args)
         caption_preds = np.argmax(predictions[0], axis=-1)
         decoded_preds = tokenizer.batch_decode(caption_preds, skip_special_tokens=True)
         decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
+        with open(f'val_results_{datetime.datetime.now()}.csv', 'w') as f:
+            f.write('actual, pred\n')
+            for label, pred in zip(decoded_labels, decoded_preds):
+                f.write(f'{label},{pred}\n')
         return rouge_score.compute(predictions=decoded_preds, references=decoded_labels, use_stemmer=True)
     
 
@@ -121,6 +125,7 @@ if __name__ == '__main__':
             image = data['pixel_values'].unsqueeze(0).to(model.device)
             caption = tokenizer.decode(data['labels'], skip_special_tokens=True)
             outputs = model.generate(image)
+            pdb.set_trace()
             f.write(f'{caption},')
             f.write(f'{tokenizer.decode(outputs[0], skip_special_tokens=True)}\n')
         
