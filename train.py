@@ -33,7 +33,7 @@ class CustomTrainer(Trainer):
 def train(model, feature_extractor, tokenizer, train_dataset, val_dataset, args):
 
     def compute_metrics(eval_pred):
-        pdb.set_trace()
+        #pdb.set_trace()
         predictions, labels = eval_pred
         caption_preds = np.argmax(predictions[0], axis=-1)
         decoded_preds = tokenizer.batch_decode(caption_preds, skip_special_tokens=True)
