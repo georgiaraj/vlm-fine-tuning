@@ -76,7 +76,7 @@ def train(model, feature_extractor, tokenizer, train_dataset, val_dataset, args)
     feature_extractor.save_pretrained(args.output_dir)
     tokenizer.save_pretrained(args.output_dir)
 
-    return model, feature_extractor, tokenizer
+    return model, trainer
 
 if __name__ == '__main__':
 
@@ -112,11 +112,15 @@ if __name__ == '__main__':
     #print(f'Tokenizer: {tokenizer}')
     #pdb.set_trace()
     
-    model, feature_extractor, tokenizer =  train(model, feature_extractor, tokenizer, train_dataset, val_dataset, args)
+    model, trainer =  train(model, feature_extractor, tokenizer, train_dataset, val_dataset, args)
 
     print(f'Model trained')
 
     model.eval()
+
+    predictions, label_ids, metrics = trainer.predict(test_dataset)
+
+    pdb.set_trace()
 
     def test_model(model, dataset, output_file):
         with open(output_file, 'w') as f:
