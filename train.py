@@ -3,6 +3,7 @@ import os
 import torch
 import datetime
 import argparse
+import numpy as np
 from pathlib import Path
 from transformers import VisionEncoderDecoderModel, ViTImageProcessor, AutoTokenizer, VisionEncoderDecoderConfig
 from transformers import Trainer, TrainingArguments
