@@ -49,7 +49,7 @@ def train(model, feature_extractor, tokenizer, train_dataset, val_dataset, args)
         weight_decay=0.01,
         logging_dir='./logs',
         no_cuda=False,
-        report_to=['clearml']
+        report_to=['clearml'],
         evaluation_strategy='epoch',
         save_strategy='epoch'
         )
