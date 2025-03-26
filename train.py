@@ -33,6 +33,7 @@ class CustomTrainer(Trainer):
 def train(model, feature_extractor, tokenizer, train_dataset, val_dataset, args):
 
     def compute_metrics(eval_pred):
+        pdb.set_trace()
         predictions, labels = eval_pred
         decoded_preds = tokenizer.batch_decode(predictions, skip_special_tokens=True)
         decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
@@ -60,6 +61,8 @@ def train(model, feature_extractor, tokenizer, train_dataset, val_dataset, args)
         eval_dataset=val_dataset,
         compute_metrics=compute_metrics
     )
+
+    print(trainer.model.config)
 
     trainer.train()
 
