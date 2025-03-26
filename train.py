@@ -118,15 +118,16 @@ if __name__ == '__main__':
 
     model.eval()
 
-    print(f'Testing model on test dataset')
-    with open('results.csv', 'w') as f:
-        f.write('actual, predicted\n')
-        for data in test_dataset:
-            image = data['pixel_values'].unsqueeze(0).to(model.device)
-            caption = tokenizer.decode(data['labels'], skip_special_tokens=True)
-            outputs = model.generate(image, max_new_tokens=128, num_return_sequences=1, do_sample=True)
-            pdb.set_trace()
-            f.write(f'{caption},')
-            f.write(f'{tokenizer.decode(outputs[0], skip_special_tokens=True)}\n')
+    with torch.no_grad():
+        print(f'Testing model on test dataset')
+        with open('results.csv', 'w') as f:
+            f.write('actual, predicted\n')
+            for data in test_dataset:
+                image = data['pixel_values'].unsqueeze(0).to(model.device)
+                caption = tokenizer.decode(data['labels'], skip_special_tokens=True)
+                outputs = model.generate(image, max_new_tokens=128, num_return_sequences=1, do_sample=True)
+                pdb.set_trace()
+                f.write(f'{caption},')
+                f.write(f'{tokenizer.decode(outputs[0], skip_special_tokens=True)}\n')
         
     
