@@ -133,9 +133,9 @@ if __name__ == '__main__':
     with torch.no_grad():
     # Check result on validation dataset
         print(f'Testing model on val dataset')
-        test_model(model, val_dataset, val_results.csv)
+        test_model(model, val_dataset, 'val_results.csv')
 
         print(f'Testing model on test dataset')
-        test_model(model, test_dataset, test_results.csv)
+        test_model(model, test_dataset, 'test_results.csv')
         
     
