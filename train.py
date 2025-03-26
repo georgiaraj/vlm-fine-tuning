@@ -4,7 +4,7 @@ import torch
 import datetime
 import argparse
 from pathlib import Path
-from transformers import VisionEncoderDecoderModel, ViTImageProcessor, AutoTokenizer
+from transformers import VisionEncoderDecoderModel, ViTImageProcessor, AutoTokenizer, VisionEncoderDecoderConfig
 from transformers import Trainer, TrainingArguments
 from evaluate import load
 
@@ -50,6 +50,8 @@ def train(model, feature_extractor, tokenizer, train_dataset, val_dataset, args)
         logging_dir='./logs',
         no_cuda=False,
         report_to=['clearml']
+        evaluation_strategy='epoch',
+        save_strategy='epoch'
         )
 
     trainer = CustomTrainer(
@@ -90,9 +92,12 @@ if __name__ == '__main__':
     print(f'Test dataset length: {len(test_dataset)}')
 
     model = VisionEncoderDecoderModel.from_pretrained(args.model_name)
+    
+    print(model.config)
+    #pdb.set_trace()
 
-    print(f'Model forward variables: {model.forward.__code__.co_varnames}')
-    print(f'Train dataset keys: {train_dataset[0].keys()}')
+    #print(f'Model forward variables: {model.forward.__code__.co_varnames}')
+    #print(f'Train dataset keys: {train_dataset[0].keys()}')
 
     #print(f'Model: {model}')
     #print(f'Feature extractor: {feature_extractor}')
@@ -112,7 +117,7 @@ if __name__ == '__main__':
             image = data['pixel_values'].unsqueeze(0).to(model.device)
             caption = tokenizer.decode(data['labels'], skip_special_tokens=True)
             outputs = model.generate(image)
-            f.write(f'{tokenizer.decode(outputs[0], skip_special_tokens=True)},')
-            f.write(f'{caption}\n')
+            f.write(f'{caption},')
+            f.write(f'{tokenizer.decode(outputs[0], skip_special_tokens=True)}\n')
         
     
