@@ -109,8 +109,9 @@ if __name__ == '__main__':
     with open('results.csv', 'w') as f:
         f.write('actual, predicted\n')
         for data in test_dataset:
+            image = data['pixel_values'].unsqueeze(0).to(model.device)
             caption = tokenizer.decode(data['labels'], skip_special_tokens=True)
-            outputs = model.generate(data['pixel_values'].unsqueeze(0))
+            outputs = model.generate(image)
             f.write(f'{tokenizer.decode(outputs[0], skip_special_tokens=True)},')
             f.write(f'{caption}\n')
         
