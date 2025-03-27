@@ -21,6 +21,7 @@ def parse_args():
     parser.add_argument('--dataset_path', type=str, default='scalpel-angles/scalpel_dataset.csv')
     parser.add_argument('--output_dir', type=str, default='scalpel-angles-model')
     parser.add_argument('--clearml-task-name', type=str, default=f'VLM Training Job {datetime.datetime.now()}')
+    parser.add_argument('--num-epochs', type=int, default=100, help="Number of epochs to train")
     return parser.parse_args()
 
 
@@ -48,7 +49,7 @@ def train(model, feature_extractor, tokenizer, train_dataset, val_dataset, args)
 
     training_args = TrainingArguments(
         output_dir=args.output_dir,
-        num_train_epochs=1,
+        num_train_epochs=args.num_epochs,
         per_device_train_batch_size=8,
         per_device_eval_batch_size=8,
         #warmup_steps=500,
