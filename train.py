@@ -127,7 +127,7 @@ if __name__ == '__main__':
                 #pdb.set_trace()
                 caption = tokenizer.decode(data['labels'], skip_special_tokens=True)
                 p_caption = tokenizer.decode(np.argmax(pred, axis=-1), skip_special_tokens=True)
-                f.write(f'{caption}, {pred}\n')
+                f.write(f'{caption}, {p_caption}\n')
         
 
     with torch.no_grad():
