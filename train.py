@@ -124,7 +124,7 @@ if __name__ == '__main__':
         with open(output_file, 'w') as f:
             f.write('actual, predicted\n')
             for data, pred in zip(dataset, predictions[0]):
-                pdb.set_trace()
+                #pdb.set_trace()
                 caption = tokenizer.decode(data['labels'], skip_special_tokens=True)
                 p_caption = tokenizer.decode(np.argmax(pred, axis=-1), skip_special_tokens=True)
                 f.write(f'{caption}, {pred}\n')
