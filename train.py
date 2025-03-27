@@ -118,20 +118,15 @@ if __name__ == '__main__':
 
     model.eval()
 
-    predictions, label_ids, metrics = trainer.predict(test_dataset)
-
-    pdb.set_trace()
-
+    
     def test_model(model, dataset, output_file):
+        predictions, label_ids, metrics = trainer.predict(dataset)
         with open(output_file, 'w') as f:
             f.write('actual, predicted\n')
-            for data in dataset:
-                image = data['pixel_values'].unsqueeze(0).to(model.device)
+            for data, pred in zip(dataset, predictions):
+                pdb.set_trace()
                 caption = tokenizer.decode(data['labels'], skip_special_tokens=True)
-                outputs = model.generate(image, max_new_tokens=128, num_return_sequences=1, do_sample=True)
-                #pdb.set_trace()
-                f.write(f'{caption},')
-                f.write(f'{tokenizer.decode(outputs[0], skip_special_tokens=True)}\n')
+                f.write(f'{caption}, {pred}\n')
         
 
     with torch.no_grad():
