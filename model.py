@@ -1,4 +1,5 @@
-import torch
+import datetime
+import numpy as np
 from transformers import VisionEncoderDecoderModel, ViTImageProcessor, AutoTokenizer, VisionEncoderDecoderConfig
 from transformers import Trainer, TrainingArguments
 
@@ -70,7 +71,7 @@ class VLMModel():
             per_device_train_batch_size=args.batch_size,
             per_device_eval_batch_size=args.batch_size,
             num_train_epochs=args.num_epochs,
-            evaluation_strategy="epoch",
+            eval_strategy="epoch",
             save_strategy="epoch",
             logging_dir='./logs',
             logging_steps=10,
